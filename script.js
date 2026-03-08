@@ -1,7 +1,3 @@
-// =====================
-// THREE JS BACKGROUND
-// =====================
-
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
@@ -12,57 +8,46 @@ window.innerWidth/window.innerHeight,
 );
 
 const renderer = new THREE.WebGLRenderer({
-canvas:document.querySelector('#bg')
+canvas:document.querySelector("#bg")
 });
 
-renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth,window.innerHeight);
 
-camera.position.setZ(30);
+camera.position.z=5;
 
-renderer.render(scene,camera);
 
-// particles
+// TEXTURE BACKGROUND (HUTAN / KOTA)
 
-const particlesGeometry = new THREE.BufferGeometry();
-const particlesCount = 2000;
+const textureLoader = new THREE.TextureLoader();
 
-const posArray = new Float32Array(particlesCount * 3);
-
-for(let i=0;i<particlesCount*3;i++){
-posArray[i]=(Math.random()-0.5)*100;
-}
-
-particlesGeometry.setAttribute(
-'position',
-new THREE.BufferAttribute(posArray,3)
+const bgTexture = textureLoader.load(
+"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"
 );
 
-const particlesMaterial = new THREE.PointsMaterial({
-size:0.1
-});
+scene.background = bgTexture;
 
-const particlesMesh = new THREE.Points(
-particlesGeometry,
-particlesMaterial
-);
 
-scene.add(particlesMesh);
+// LIGHT
+
+const light = new THREE.AmbientLight(0xffffff,1);
+
+scene.add(light);
+
+
+// ANIMATE
 
 function animate(){
+
 requestAnimationFrame(animate);
 
-particlesMesh.rotation.y +=0.0005;
-
 renderer.render(scene,camera);
+
 }
 
 animate();
 
 
-// =====================
-// PHOTO GENERATOR
-// =====================
+// CREATE PHOTOS
 
 function createPhotos(section){
 
@@ -90,9 +75,7 @@ createPhotos(document.getElementById("khusus"));
 createPhotos(document.getElementById("story"));
 
 
-// =====================
-// PAGE SWITCH
-// =====================
+// MENU SWITCH
 
 function showPage(page){
 
@@ -102,4 +85,4 @@ sections.forEach(s=>s.classList.add("hidden"));
 
 document.getElementById(page).classList.remove("hidden");
 
-  }
+}
